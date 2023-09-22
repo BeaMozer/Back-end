@@ -1,0 +1,25 @@
+{
+  "name": "labecommerce-backend",
+  "version": "1.0.0",
+  "description": "Exercícios de Back-end sugeridos pelo Bootcamp Labenu",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc && node ./build/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BeaMozer/labecommerce-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BeaMozer/labecommerce-backend/issues"
+  },
+  "homepage": "https://github.com/BeaMozer/labecommerce-backend#readme",
+  "devDependencies": {
+    "@types/node": "^20.6.0",
+    "typescript": "^5.2.2"
+  }
+}
