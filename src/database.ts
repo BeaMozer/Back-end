@@ -1,21 +1,20 @@
-import { log } from "console";
 import { TProducts, TUsers } from "./types";
 
 export const users: TUsers[] = [
   {
     id: "u001",
-    name: "Fulano",
-    email: "fulano@email.com",
-    password: "fulano123",
-    createdAt: "setember", //newDate().toISOString()
+    name: "Beatriz",
+    email: "beatriz@email.com",
+    password: "bia123",
+    createdAt: new Date().toISOString(),
   },
 
   {
     id: "u002",
-    name: "Beltrano",
-    email: "beltrana@email.com",
-    password: "beltrana00",
-    createdAt: "october", //newDate().toISOString()
+    name: "Nicholas",
+    email: "nicholas@email.com",
+    password: "nich00",
+    createdAt: new Date().toISOString(),
   },
 ];
 
@@ -35,3 +34,51 @@ export const products: TProducts[] = [
     imageUrl: "https://picsum.photos/seed/Monitor/400",
   },
 ];
+
+// Criar novo usuário
+
+export const createUser = (
+  id: string,
+  name: string,
+  email: string,
+  password: string
+): string => {
+  const createdAt: string = new Date().toISOString();
+  const newUser: TUsers = { id, name, email, password, createdAt };
+  users.push(newUser);
+
+  return "Cadastro realizado com sucesso";
+};
+
+//retornar todos os usuarios
+
+export function getAllUsers(): TUsers[] {
+  return users;
+}
+
+// Criar um novo produto
+export const createProduct = (
+  id: string,
+  name: string,
+  price: number,
+  description: string,
+  imageUrl: string
+): string => {
+  const newProduct: TProducts = { id, name, price, description, imageUrl };
+  products.push(newProduct);
+  return "Produto cadastrado com sucesso";
+};
+
+// Retornar todos os produtos da lista de produtos
+export function getAllProducts(): TProducts[] {
+  return products;
+}
+
+//procurar por nome
+export const searchProductsByName = (name: string): TProducts[] => {
+  const search = name.toLowerCase();
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(search)
+  );
+  return filteredProducts;
+};
