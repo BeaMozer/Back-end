@@ -5,7 +5,7 @@ export type TUsers = {
   name: string;
   email: string;
   password: string;
-  createdAt: string; //(string no formato ano-mês-dia T hora:minuto:segundo:milésimo-de-segundos Z),
+  createdAt: string;
 };
 
 export type TProducts = {
