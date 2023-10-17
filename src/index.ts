@@ -79,20 +79,49 @@ app.post("/products", (req: Request, res: Response) => {
   res.status(201).send("Produto cadastrado com sucesso!");
 });
 
-// console.log(createUser("u003", "Astrodev", "astrodev@email.com", "astrodev99"));
+//Deletar usuario por Id
 
-// console.log(getAllUsers());
+app.delete("/users/:id", (req: Request, res: Response) => {
+  const id = req.params.id;
+  const indexToDelete = users.findIndex((user) => user.id === id);
 
-// console.log(
-//   createProduct(
-//     "prod003",
-//     "SSD gamer",
-//     349.99,
-//     "Acelere seu sistema com velocidades incríveis de leitura e gravação.",
-//     "https://images.unsplash.com/photo"
-//   )
-// );
+  if (indexToDelete >= 0) {
+    users.splice(indexToDelete, 1);
+  }
 
-// console.log(getAllProducts());
+  res.status(200).send("User apagado com sucesso");
+});
 
-// console.log(searchProductsByName("gamer"));
+//Deletar produto por Id
+
+app.delete("/products/:id", (req: Request, res: Response) => {
+  const id = req.params.id;
+  const indexToDelete = products.findIndex((product) => product.id === id);
+
+  if (indexToDelete >= 0) {
+    products.splice(indexToDelete, 1);
+  }
+
+  res.status(200).send("Produto apagado com sucesso");
+});
+
+//Editar produtos por Id
+app.put("/products/:id", (req: Request, res: Response) => {
+  const newId = req.params.id;
+  const newName = req.body.name as string | undefined;
+  const newPrice = req.body.price as number | undefined;
+  const newDescription = req.body.description as string | undefined;
+  const newImageUrl = req.body.imageUrl as string | undefined;
+
+  const newProduct = products.find((item) => item.id === newId);
+
+  if (newProduct) {
+    newProduct.id = newId || newProduct.id;
+    newProduct.name = newName || newProduct.name;
+    newProduct.price = newPrice || newProduct.price;
+    newProduct.imageUrl = newImageUrl || newProduct.imageUrl;
+    newProduct.description = newDescription || newProduct.description;
+  }
+
+  res.status(200).send("Produto atualizado com sucesso");
+});
