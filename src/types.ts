@@ -1,5 +1,3 @@
-// estamos dentro do arquivo src/types.ts tipando um vídeo do youtube
-
 export type TUsers = {
   id: string;
   name: string;
