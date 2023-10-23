@@ -52,3 +52,40 @@ SET
   description = 'Teclado Mecanico Gamer',
   image_url = 'https://m.media-amazon.com/images/I/71jAUlz7KPL._AC_UF894,1000_QL80_.jpg'
 WHERE id = 'prod003';
+
+CREATE TABLE purchases (
+  id TEXT PRIMARY KEY UNIQUE NOT NULL,
+  buyer TEXT NOT NULL,
+  total_price REAL NOT NULL,
+  created_at TEXT NOT NULL,
+  FOREIGN KEY (buyer) REFERENCES users(id)
+);
+
+INSERT INTO purchases
+VALUES (
+        'pur001',
+        'u003',
+        280.00,
+        strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')
+    ), (
+        'pur003',
+        'u005',
+        100.00,
+        strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')
+    );
+
+SELECT * FROM purchases;
+
+UPDATE purchases SET total_price = 360.00 WHERE id = 'p001';
+
+SELECT
+    purchases.id AS purchases_id,
+    buyer AS buyer_id,
+    users.name AS buyer_name,
+    users.email AS email,
+    total_price,
+    purchases.created_at 
+FROM users
+    INNER JOIN purchases ON buyer = users.id;
+
+
