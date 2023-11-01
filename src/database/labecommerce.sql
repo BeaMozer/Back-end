@@ -76,7 +76,8 @@ VALUES (
 
 SELECT * FROM purchases;
 
-UPDATE purchases SET total_price = 360.00 WHERE id = 'p001';
+
+UPDATE purchases SET total_price = 360.00 WHERE id = 'pur001';
 
 SELECT
     purchases.id AS purchases_id,
@@ -88,4 +89,32 @@ SELECT
 FROM users
     INNER JOIN purchases ON buyer = users.id;
 
+CREATE TABLE purchases_products (
+  purchase_id TEXT NOT NULL,
+  product_id TEXT NOT NULL,
+  quantity INTEGER NOT NULL,
+  FOREIGN KEY (purchase_id) REFERENCES purchases(id),
+  FOREIGN KEY (product_id) REFERENCES products(id) 
+  ON UPDATE CASCADE 
+  ON DELETE CASCADE
+);
+
+
+
+INSERT INTO purchases_products 
+VALUES
+('pur001', 'prod004', 1),
+('pur001', 'prod005', 2),
+('pur003', 'prod007', 2);
+
+SELECT
+    purchase_id, product_id, products.name, quantity, price 
+FROM purchases_products
+    INNER JOIN products ON purchases_products.product_id = products.id
+    INNER JOIN purchases ON purchases_products.purchase_id = purchases.id
+
+SELECT *
+FROM purchases_products
+INNER JOIN purchases ON purchases_products.purchase_id = purchases.id
+INNER JOIN products ON purchases_products.product_id = products.id;
 
