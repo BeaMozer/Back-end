@@ -15,7 +15,7 @@ app.listen(3003, () => {
 //retorna usuarios
 app.get("/users", async (req: Request, res: Response) => {
   try {
-    const resultUsers = await db.raw(`SELECT * FROM users`);
+    const resultUsers = await db.select("*").from("users");
 
     res.status(200).send(resultUsers);
   } catch (error: any) {
@@ -33,7 +33,7 @@ app.get("/users", async (req: Request, res: Response) => {
 //returna produtos
 app.get("/products", async (req: Request, res: Response) => {
   try {
-    const resultProducts = await db.raw(`SELECT * FROM products`);
+    const resultProducts = await db.select("*").from("products");
     res.status(200).send(resultProducts);
   } catch (error) {
     if (error instanceof Error) {
