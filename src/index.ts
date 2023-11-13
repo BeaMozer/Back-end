@@ -1,15 +1,6 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
-import {
-  users,
-  products,
-  createUser,
-  getAllUsers,
-  createProduct,
-  getAllProducts,
-  searchProductsByName,
-} from "./database";
-import { TProducts, TUsers } from "./types";
+import { TProducts } from "./types";
 import { db } from "./database/knex";
 
 const app = express();
@@ -24,7 +15,7 @@ app.listen(3003, () => {
 //retorna usuarios
 app.get("/users", async (req: Request, res: Response) => {
   try {
-    const resultUsers = await db.raw(`SELECT * FROM users`);
+    const resultUsers = await db.select("*").from("users");
 
     res.status(200).send(resultUsers);
   } catch (error: any) {
@@ -42,7 +33,7 @@ app.get("/users", async (req: Request, res: Response) => {
 //returna produtos
 app.get("/products", async (req: Request, res: Response) => {
   try {
-    const resultProducts = await db.raw(`SELECT * FROM products`);
+    const resultProducts = await db.select("*").from("products");
     res.status(200).send(resultProducts);
   } catch (error) {
     if (error instanceof Error) {
@@ -328,6 +319,89 @@ app.post("/purchases", async (req: Request, res: Response) => {
       )`);
 
     res.status(201).send("Compra cadastrada com sucesso");
+  } catch (error) {
+    console.log(error);
+    if (req.statusCode === 200) {
+      res.status(500);
+    }
+    if (error instanceof Error) {
+      res.send(error.message);
+    } else {
+      res.send("Erro inesperado");
+    }
+  }
+});
+
+app.get("/purchases/:id", async (req: Request, res: Response) => {
+  try {
+    const purchaseId = req.params.id;
+
+    if (!purchaseId) {
+      res.statusCode = 404;
+      throw new Error(`Pedido ${purchaseId} não encontrado`);
+    }
+
+    const [purchaseInfo] = await db("purchases")
+      .select(
+        "purchases.id as purchaseId",
+        "users.id as buyerId",
+        "users.name as buyerName",
+        "users.email as buyerEmail",
+        "purchases.total_price as totalPrice",
+        "purchases.created_at as createdAt"
+      )
+      .innerJoin("users", "purchases.buyer_id", "=", "users.id")
+      .where({ "purchases.id": purchaseId });
+
+    const resultProducts = await db("purchases_products")
+      .select(
+        "id as idProduct",
+        "name as nameProduct",
+        "price as priceProduct",
+        "description as descriptionProduct",
+        "image_url as imageUrlProducts",
+        "quantity as qtnd"
+      )
+      .innerJoin(
+        "products",
+        "purchases_products.product_id",
+        "=",
+        "products.id"
+      )
+      .where({ "purchases_products.purchase_id": purchaseId });
+
+    const newResult = {
+      ...purchaseInfo,
+      products: resultProducts,
+    };
+
+    res.status(200).send(newResult);
+  } catch (error) {
+    console.log(error);
+    if (req.statusCode === 200) {
+      res.status(500);
+    }
+    if (error instanceof Error) {
+      res.send(error.message);
+    } else {
+      res.send("Erro inesperado");
+    }
+  }
+});
+
+app.delete("/purchases/:id", async (req: Request, res: Response) => {
+  try {
+    const idToDelete = req.params.id;
+
+    const [purchase] = await db("purchases").where({ id: idToDelete });
+
+    if (!purchase) {
+      res.status(404);
+      throw new Error("'id' não encontrada");
+    }
+    await db("purchases").del().where({ id: idToDelete });
+
+    res.status(200).send({ message: "Pedido  deletado com sucesso" });
   } catch (error) {
     console.log(error);
     if (req.statusCode === 200) {
