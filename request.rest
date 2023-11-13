@@ -1,0 +1,42 @@
+GET http://localhost:3003/users
+###
+
+GET http://localhost:3003/products
+###
+
+GET http://localhost:3003/products/search?q=Mesa
+###
+
+POST http://localhost:3003/users
+Content-Type: application/json
+
+{
+  "id": "u004",
+  "name": "Gustavo",
+  "email": "gustavo@gmail.com",
+  "password": "123456"
+}
+###
+
+POST http://localhost:3003/products
+Content-Type: application/json
+
+{
+  "id": "prod008",
+  "name": "Mesa",
+  "price": 800,
+  "description": "Mesa gamer",
+  "imageUrl": "https://picsum.photos/seed/Monitor/400"
+}
+###
+
+GET http://localhost:3003/users/:id/u003
+###
+
+PUT http://localhost:3003/products/:id/prod003
+Content-Type: application/json
+
+{
+  "imageUrl": "https://picsum.photos/seed/Monitor/400"
+}
+###

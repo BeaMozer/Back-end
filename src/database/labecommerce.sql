@@ -5,7 +5,7 @@ CREATE TABLE users (
   name TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL,
-  creat_at TEXT NOT NULL
+  creat_at DATETIME DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime'))
 );
 
 SELECT * FROM users;
@@ -57,9 +57,12 @@ CREATE TABLE purchases (
   id TEXT PRIMARY KEY UNIQUE NOT NULL,
   buyer TEXT NOT NULL,
   total_price REAL NOT NULL,
-  created_at TEXT NOT NULL,
+  creat_at DATETIME DEFAULT (strftime('%Y-%m-%d %H:%M:%S', 'now', 'localtime')),
   FOREIGN KEY (buyer) REFERENCES users(id)
+  ON UPDATE CASCADE 
+	ON DELETE CASCADE
 );
+
 
 INSERT INTO purchases
 VALUES (
@@ -84,8 +87,8 @@ SELECT
     buyer AS buyer_id,
     users.name AS buyer_name,
     users.email AS email,
-    total_price,
-    purchases.created_at 
+    total_price
+    
 FROM users
     INNER JOIN purchases ON buyer = users.id;
 
@@ -98,7 +101,6 @@ CREATE TABLE purchases_products (
   ON UPDATE CASCADE 
   ON DELETE CASCADE
 );
-
 
 
 INSERT INTO purchases_products 
@@ -118,3 +120,4 @@ FROM purchases_products
 INNER JOIN purchases ON purchases_products.purchase_id = purchases.id
 INNER JOIN products ON purchases_products.product_id = products.id;
 
+SELECT * FROM products
